@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 
 interface Teacher {
     id: number;
@@ -34,15 +35,26 @@ export default function CreateCourse({ teachers }: Props) {
         <AppLayout>
             <Head title="Create Course" />
 
-            <div className="container mx-auto py-8 max-w-2xl">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold">Create New Course</h1>
+            <div className="site-container py-8">
+                <div className="flex justify-between items-center mb-4">
+                    <h1 className="classical-title text-2xl">Create New Course</h1>
                     <Link href="/admin/courses">
                         <Button variant="outline">Back to Courses</Button>
                     </Link>
                 </div>
 
-                <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6 space-y-6">
+                <Card>
+                    <CardHeader>
+                        <div className="flex items-center justify-between w-full">
+                            <div>
+                                <div className="text-lg font-semibold">New Course details</div>
+                                <div className="text-sm text-[var(--classical-muted)]">Fill required fields to create a course</div>
+                            </div>
+                        </div>
+                    </CardHeader>
+
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <CardContent>
                     <div>
                         <Label htmlFor="name">Course Name *</Label>
                         <Input
@@ -108,15 +120,18 @@ export default function CreateCourse({ teachers }: Props) {
                         <Label htmlFor="is_available">Course is available for enrollment</Label>
                     </div>
 
-                    <div className="flex justify-end gap-4">
-                        <Link href="/admin/courses">
-                            <Button type="button" variant="outline">Cancel</Button>
-                        </Link>
-                        <Button type="submit" disabled={processing}>
-                            {processing ? 'Creating...' : 'Create Course'}
-                        </Button>
-                    </div>
-                </form>
+                        </CardContent>
+
+                        <CardFooter className="justify-end gap-4">
+                            <Link href="/admin/courses">
+                                <Button type="button" variant="outline">Cancel</Button>
+                            </Link>
+                            <Button type="submit" disabled={processing}>
+                                {processing ? 'Creating...' : 'Create Course'}
+                            </Button>
+                        </CardFooter>
+                    </form>
+                </Card>
             </div>
         </AppLayout>
     );

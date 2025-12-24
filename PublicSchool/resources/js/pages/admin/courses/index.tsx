@@ -1,7 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/lib/toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -54,87 +54,73 @@ export default function CoursesIndex({ courses, teachers }: Props) {
         <AppLayout>
             <Head title="Manage Courses" />
 
-            <div className="container mx-auto py-8">
+            <div className="site-container py-8">
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold">Manage Courses</h1>
+                    <h1 className="classical-title text-2xl">Manage Courses</h1>
                     <Link href="/admin/courses/create">
                         <Button>Create New Course</Button>
                     </Link>
                 </div>
 
-                <div className="bg-white rounded-lg shadow overflow-hidden">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Name</TableHead>
-                                <TableHead>Teacher</TableHead>
-                                <TableHead>Enrolled</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {courses.map((course) => (
-                                <TableRow key={course.id}>
-                                    <TableCell className="font-medium">{course.name}</TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-2">
-                                            <div className="min-w-[180px]">
-                                                <Select
-                                                    value={course.teacher ? course.teacher.id.toString() : 'none'}
-                                                    onValueChange={(value) => assignTeacher(course.id, value === 'none' ? null : parseInt(value))}
-                                                >
-                                                    <SelectTrigger className="h-9 w-full">
-                                                        <SelectValue placeholder={course.teacher ? course.teacher.name : 'No teacher assigned'} />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="none">No teacher assigned</SelectItem>
-                                                        {teachers.map((t) => (
-                                                            <SelectItem key={t.id} value={t.id.toString()}>
-                                                                {t.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
-                                            {course.teacher && (
-                                                <Badge>{course.teacher.name}</Badge>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        {course.enrolled_students_count} / {course.max_students}
-                                    </TableCell>
-                                    <TableCell>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {courses.map((course) => (
+                        <Card key={course.id} className="muted-bg hover:shadow-lg transition-all">
+                            <CardHeader>
+                                <div className="flex items-start justify-between gap-4">
+                                    <div>
+                                        <div className="font-semibold text-lg">{course.name}</div>
+                                        <div className="text-sm text-[var(--classical-muted)]">{new Date(course.created_at).toLocaleDateString()}</div>
+                                    </div>
+                                    <div>
                                         <Badge variant={course.is_available ? 'success' : 'secondary'}>
                                             {course.is_available ? 'Available' : 'Unavailable'}
                                         </Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex gap-2">
-                                            <Link href={`/admin/courses/${course.id}/edit`}>
-                                                <Button size="sm" variant="outline">Assign</Button>
-                                            </Link>
-                                            <Button 
-                                                size="sm" 
-                                                variant="outline"
-                                                onClick={() => toggleAvailability(course.id)}
-                                            >
-                                                {course.is_available ? 'Disable' : 'Enable'}
-                                            </Button>
-                                            <Button 
-                                                size="sm" 
-                                                variant="destructive"
-                                                onClick={() => deleteCourse(course.id)}
-                                            >
-                                                Delete
-                                            </Button>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                                    </div>
+                                </div>
+                            </CardHeader>
+
+                            <CardContent>
+                                <p className="mb-3 text-sm text-muted-foreground">{course.description}</p>
+
+                                <div className="flex items-center gap-3">
+                                    <div className="min-w-[160px]">
+                                        <Select
+                                            value={course.teacher ? course.teacher.id.toString() : 'none'}
+                                            onValueChange={(value) => assignTeacher(course.id, value === 'none' ? null : parseInt(value))}
+                                        >
+                                            <SelectTrigger className="h-9 w-full">
+                                                <SelectValue placeholder={course.teacher ? course.teacher.name : 'No teacher assigned'} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="none">No teacher assigned</SelectItem>
+                                                {teachers.map((t) => (
+                                                    <SelectItem key={t.id} value={t.id.toString()}>
+                                                        {t.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    {course.teacher && <Badge>{course.teacher.name}</Badge>}
+                                </div>
+
+                                <div className="mt-3 text-sm">Enrolled: <span className="font-medium">{course.enrolled_students_count}</span> / {course.max_students}</div>
+                            </CardContent>
+
+                            <CardFooter className="justify-end gap-2">
+                                <Link href={`/admin/courses/${course.id}/edit`}>
+                                    <Button size="sm" variant="outline">Edit</Button>
+                                </Link>
+                                <Button size="sm" variant="outline" onClick={() => toggleAvailability(course.id)}>
+                                    {course.is_available ? 'Disable' : 'Enable'}
+                                </Button>
+                                <Button size="sm" variant="destructive" onClick={() => deleteCourse(course.id)}>
+                                    Delete
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    ))}
                 </div>
             </div>
         </AppLayout>
