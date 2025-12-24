@@ -16,8 +16,13 @@ class CourseController extends Controller
             ->withCount('enrolledStudents')
             ->get();
 
+        $teachers = User::whereHas('role', function ($query) {
+            $query->where('name', 'teacher');
+        })->get(['id', 'name']);
+
         return Inertia::render('admin/courses/index', [
             'courses' => $courses,
+            'teachers' => $teachers,
         ]);
     }
 
