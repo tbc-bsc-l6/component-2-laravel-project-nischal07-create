@@ -2,6 +2,9 @@
 
 @import "tw-animate-css";
 
+/* Import a classical serif font for a timeless look */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
+
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
@@ -62,6 +65,13 @@
 }
 
 :root {
+    /* Classical theme variables */
+    --font-classical: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --classical-primary: #7b1f3a; /* deep burgundy */
+    --classical-accent: #d4a017; /* warm gold */
+    --classical-secondary: #1d4e89; /* classical navy */
+    --classical-muted: #6b6b6b; /* muted gray */
+
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -137,7 +147,32 @@
         @apply border-border;
     }
 
+    /* Apply the classical serif as the default site font and gentle accent colors */
     body {
+        font-family: var(--font-classical), var(--font-sans);
         @apply bg-background text-foreground;
+        color: var(--foreground);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
+
+    /* Headings: add classical feel and colorful accent */
+    h1, h2, h3 {
+        font-family: var(--font-classical);
+        color: var(--classical-primary);
+        letter-spacing: -0.01em;
+    }
+
+    /* Links and primary buttons should use a warm gold accent */
+    a, .btn-primary, .btn-accent {
+        color: var(--classical-secondary);
+    }
+
+    button, .btn {
+        font-family: var(--font-classical);
+    }
+
+    /* Utility classes for classical styling */
+    .classical-title { font-family: var(--font-classical); color: var(--classical-primary); }
+    .classical-accent { color: var(--classical-accent); }
 }
