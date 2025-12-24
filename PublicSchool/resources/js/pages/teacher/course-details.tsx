@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/lib/toast';
 import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 
 interface Student {
     id: number;
@@ -34,12 +35,12 @@ export default function CourseDetails({ course }: Props) {
     // maintain local students state for optimistic updates
     const [students, setStudents] = useState<Student[]>(course.students || []);
     const [processingIds, setProcessingIds] = useState<number[]>([]);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [selectedStudentId, setSelectedStudentId] = useState<number | null>(null);
+    const [selectedStudentName, setSelectedStudentName] = useState<string | null>(null);
+    const [selectedPassStatus, setSelectedPassStatus] = useState<'pending' | 'pass' | 'fail'>('pass');
 
-    const gradeStudent = (studentId: number, passStatus: 'pass' | 'fail') => {
-        if (!confirm(`Are you sure you want to mark this student as ${passStatus.toUpperCase()}?`)) {
-            return;
-        }
-
+    const gradeStudent = (studentId: number, passStatus: 'pending' | 'pass' | 'fail') => {
         // mark as processing
         setProcessingIds((p) => [...p, studentId]);
 
@@ -57,12 +58,17 @@ export default function CourseDetails({ course }: Props) {
                                   pivot: {
                                       ...s.pivot,
                                       pass_status: passStatus,
-                                      completed_at: new Date().toISOString(),
+                                      completed_at: passStatus === 'pending' ? undefined : new Date().toISOString(),
                                   },
                               }
                             : s,
                     ),
                 );
+
+                // close dialog after success
+                setDialogOpen(false);
+                setSelectedStudentId(null);
+                setSelectedStudentName(null);
             },
             onError: (err) => {
                 // show server returned message if available
@@ -83,6 +89,13 @@ export default function CourseDetails({ course }: Props) {
                 setProcessingIds((p) => p.filter((id) => id !== studentId));
             },
         });
+    };
+
+    const openConfirm = (student: Student, passStatus: 'pending' | 'pass' | 'fail') => {
+        setSelectedStudentId(student.id);
+        setSelectedStudentName(student.name);
+        setSelectedPassStatus(passStatus);
+        setDialogOpen(true);
     };
 
     const enrolledStudents = students.filter((s) => s.pivot.pass_status === 'pending');
@@ -106,6 +119,7 @@ export default function CourseDetails({ course }: Props) {
                 <div className="grid gap-6">
                     {/* Enrolled Students */}
                     <Card>
+                        {/* modal state for grading confirmation */}
                         <CardHeader>
                             <CardTitle>Currently Enrolled Students</CardTitle>
                             <CardDescription>
@@ -140,7 +154,7 @@ export default function CourseDetails({ course }: Props) {
                                                         <Button
                                                             size="sm"
                                                             variant="default"
-                                                            onClick={() => gradeStudent(student.id, 'pass')}
+                                                            onClick={() => openConfirm(student, 'pass')}
                                                             disabled={processingIds.includes(student.id)}
                                                         >
                                                             {processingIds.includes(student.id) ? 'Processing...' : 'Pass'}
@@ -148,7 +162,7 @@ export default function CourseDetails({ course }: Props) {
                                                         <Button
                                                             size="sm"
                                                             variant="destructive"
-                                                            onClick={() => gradeStudent(student.id, 'fail')}
+                                                            onClick={() => openConfirm(student, 'fail')}
                                                             disabled={processingIds.includes(student.id)}
                                                         >
                                                             {processingIds.includes(student.id) ? 'Processing...' : 'Fail'}
@@ -162,6 +176,45 @@ export default function CourseDetails({ course }: Props) {
                             )}
                         </CardContent>
                     </Card>
+
+                    {/* Confirmation Dialog */}
+                    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Confirm Grading</DialogTitle>
+                                <DialogDescription>
+                                    {selectedStudentName
+                                        ? `Set ${selectedStudentName}'s status:`
+                                        : 'Choose grading status'}
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="p-4">
+                                <label className="block mb-2 text-sm">Status</label>
+                                <select
+                                    value={selectedPassStatus}
+                                    onChange={(e) => setSelectedPassStatus(e.target.value as any)}
+                                    className="w-full rounded-md border px-3 py-2"
+                                >
+                                    <option value="pending">Pending (reset)</option>
+                                    <option value="pass">Pass</option>
+                                    <option value="fail">Fail</option>
+                                </select>
+                            </div>
+                            <DialogFooter className="flex gap-2 justify-end">
+                                <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                                    Cancel
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        if (!selectedStudentId) return;
+                                        gradeStudent(selectedStudentId, selectedPassStatus);
+                                    }}
+                                >
+                                    Confirm
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
 
                     {/* Completed Students */}
                     <Card>
@@ -197,11 +250,49 @@ export default function CourseDetails({ course }: Props) {
                                                         : 'N/A'}
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Badge 
-                                                        variant={student.pivot.pass_status === 'pass' ? 'success' : 'destructive'}
-                                                    >
-                                                        {student.pivot.pass_status.toUpperCase()}
-                                                    </Badge>
+                                                    <div className="flex flex-col">
+                                                        <div>
+                                                            <Badge
+                                                                variant={student.pivot.pass_status === 'pass' ? 'success' : 'destructive'}
+                                                            >
+                                                                {student.pivot.pass_status.toUpperCase()}
+                                                            </Badge>
+                                                        </div>
+                                                        <div className="mt-2 flex gap-2">
+                                                            <Button
+                                                                size="sm"
+                                                                variant="default"
+                                                                onClick={() => gradeStudent(student.id, 'pass')}
+                                                                disabled={processingIds.includes(student.id)}
+                                                            >
+                                                                Pass
+                                                            </Button>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="destructive"
+                                                                onClick={() => gradeStudent(student.id, 'fail')}
+                                                                disabled={processingIds.includes(student.id)}
+                                                            >
+                                                                Fail
+                                                            </Button>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="outline"
+                                                                onClick={() => openConfirm(student, student.pivot.pass_status)}
+                                                                disabled={processingIds.includes(student.id)}
+                                                            >
+                                                                Edit
+                                                            </Button>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="outline"
+                                                                onClick={() => openConfirm(student, 'pending')}
+                                                                disabled={processingIds.includes(student.id)}
+                                                            >
+                                                                Reset
+                                                            </Button>
+                                                        </div>
+                                                    </div>
                                                 </TableCell>
                                             </TableRow>
                                         ))}
