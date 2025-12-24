@@ -36,7 +36,15 @@ export default function TeacherDashboard({ courses }: Props) {
                         {courses.map((course) => (
                             <Card key={course.id}>
                                 <CardHeader>
-                                    <CardTitle>{course.name}</CardTitle>
+                                    <div className="flex items-center justify-between">
+                                        <CardTitle className="mr-2">{course.name}</CardTitle>
+                                        {(() => {
+                                            const pending = Math.max(0, course.enrolled_students_count - course.completed_students_count);
+                                            return pending > 0 ? (
+                                                <Badge variant="destructive">{pending} Pending</Badge>
+                                            ) : null;
+                                        })()}
+                                    </div>
                                     <CardDescription className="line-clamp-2">
                                         {course.description || 'No description'}
                                     </CardDescription>

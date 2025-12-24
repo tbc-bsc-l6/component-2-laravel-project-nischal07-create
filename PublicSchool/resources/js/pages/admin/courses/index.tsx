@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/lib/toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface Course {
     id: number;
@@ -21,9 +22,11 @@ interface Course {
 
 interface Props {
     courses: Course[];
+    teachers: { id: number; name: string }[];
 }
 
-export default function CoursesIndex({ courses }: Props) {
+export default function CoursesIndex({ courses, teachers }: Props) {
+
     const toggleAvailability = (courseId: number) => {
         router.post(`/admin/courses/${courseId}/toggle-availability`, {}, {
             onSuccess: () => toast.success('Course availability updated'),
@@ -38,6 +41,13 @@ export default function CoursesIndex({ courses }: Props) {
                 onError: () => toast.error('Failed to delete course'),
             });
         }
+    };
+
+    const assignTeacher = (courseId: number, teacherId: number) => {
+        router.post(`/admin/courses/${courseId}/assign-teacher`, { teacher_id: teacherId }, {
+            onSuccess: () => toast.success('Teacher assigned successfully'),
+            onError: () => toast.error('Failed to assign teacher'),
+        });
     };
 
     return (
@@ -68,7 +78,29 @@ export default function CoursesIndex({ courses }: Props) {
                                 <TableRow key={course.id}>
                                     <TableCell className="font-medium">{course.name}</TableCell>
                                     <TableCell>
-                                        {course.teacher ? course.teacher.name : 'No teacher assigned'}
+                                        <div className="flex items-center gap-2">
+                                            <div className="min-w-[180px]">
+                                                <Select
+                                                    value={course.teacher ? course.teacher.id.toString() : 'none'}
+                                                    onValueChange={(value) => assignTeacher(course.id, value === 'none' ? null : parseInt(value))}
+                                                >
+                                                    <SelectTrigger className="h-9 w-full">
+                                                        <SelectValue placeholder={course.teacher ? course.teacher.name : 'No teacher assigned'} />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="none">No teacher assigned</SelectItem>
+                                                        {teachers.map((t) => (
+                                                            <SelectItem key={t.id} value={t.id.toString()}>
+                                                                {t.name}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            {course.teacher && (
+                                                <Badge>{course.teacher.name}</Badge>
+                                            )}
+                                        </div>
                                     </TableCell>
                                     <TableCell>
                                         {course.enrolled_students_count} / {course.max_students}
