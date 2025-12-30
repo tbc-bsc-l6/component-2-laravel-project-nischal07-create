@@ -13,12 +13,12 @@ export function AppSidebarHeader({
             <div className="flex items-center gap-4">
                 <SidebarTrigger className="-ml-1" />
                 <a href="/" className="flex items-center gap-3">
-                    <div className="rounded-md bg-[color:var(--classical-accent)/12] p-1">
-                        <AppLogoIcon className="size-7 fill-current text-[var(--classical-primary)]" />
+                    <div className="brand-badge">
+                        <AppLogoIcon className="size-7 fill-current text-white" />
                     </div>
                     <div className="flex flex-col leading-tight">
-                        <span className="classical-title text-base font-semibold">PublicSchool</span>
-                        <span className="text-[11px] text-[var(--classical-muted)]">A tidy learning experience</span>
+                        <span className="brand-title text-base">PublicSchool</span>
+                        <span className="text-[11px] text-[var(--classical-muted)]">Learn. Grow. Thrive.</span>
                     </div>
                 </a>
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
