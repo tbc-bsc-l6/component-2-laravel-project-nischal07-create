@@ -11,6 +11,8 @@ import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
 
 export default function Register() {
+    const urlRole = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('role') : null;
+    const initialRole = urlRole ?? 'student';
     return (
         <AuthLayout
             title="Create an account"
@@ -25,6 +27,7 @@ export default function Register() {
             >
                 {({ processing, errors }) => (
                     <>
+                        <input type="hidden" name="role" value={initialRole} />
                         <div className="grid gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="name">Name</Label>
@@ -102,10 +105,10 @@ export default function Register() {
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">
-                            Already have an account?{' '}
-                            <TextLink href={login()} tabIndex={6}>
-                                Log in
-                            </TextLink>
+                                Don't have an account?{' '}
+                                <TextLink href="/login" tabIndex={6}>
+                                    Log in
+                                </TextLink>
                         </div>
                     </>
                 )}
