@@ -65,14 +65,18 @@
 }
 
 :root {
-    /* Classical theme variables */
+    /* Brand / colorful theme variables */
     --font-classical: 'Merriweather', Georgia, 'Times New Roman', serif;
-    --classical-primary: #7b1f3a; /* deep burgundy */
-    --classical-accent: #d4a017; /* warm gold */
-    --classical-secondary: #1d4e89; /* classical navy */
-    --classical-muted: #6b6b6b; /* muted gray */
+    --classical-primary: #0ea5a4; /* teal */
+    --classical-accent: #fb7185; /* pink/coral */
+    --classical-secondary: #7c3aed; /* purple */
+    --classical-muted: #475569; /* slate */
 
-    --background: #FBF7F2; /* warm cream */
+    --background: #fff; /* fallback */
+    --hero-gradient-start: #E6FFFA; /* light mint */
+    --hero-gradient-end: #FFF7ED; /* light peach */
+    --brand-gradient: linear-gradient(135deg, #0ea5a4 0%, #7c3aed 100%);
+    --hero-card-bg: linear-gradient(180deg, rgba(14,165,164,0.08), rgba(124,58,237,0.06));
     --foreground: #1b1b18; /* deep text */
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.145 0 0);
@@ -147,19 +151,19 @@
         @apply border-border;
     }
 
-    /* Apply the classical serif as the default site font and gentle accent colors */
+    /* Apply a colorful brand as the default site font and background */
     body {
         font-family: var(--font-classical), var(--font-sans);
-        @apply bg-background text-foreground;
+        background: linear-gradient(180deg, var(--hero-gradient-start), var(--hero-gradient-end));
         color: var(--foreground);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Headings: add classical feel and colorful accent */
+    /* Headings: add modern colorful accents */
     h1, h2, h3 {
         font-family: var(--font-classical);
-        color: var(--classical-primary);
+        color: var(--classical-secondary);
         letter-spacing: -0.01em;
         line-height: 1.08;
     }
@@ -168,11 +172,10 @@
     h2 { font-size: 1.35rem; }
     h3 { font-size: 1.1rem; }
 
-    /* Links and primary buttons should use a warm burgundy accent */
+    /* Links and primary buttons use brand colors */
     a, .btn-primary, .btn-accent {
         color: var(--classical-primary);
-        text-decoration: underline;
-        text-underline-offset: 3px;
+        text-decoration: none;
     }
 
     button, .btn {
@@ -186,8 +189,8 @@
     /* Accessible focus rings using the classical accent */
     :where(input, textarea, select, button, a):focus-visible {
         outline: none;
-        box-shadow: 0 0 0 4px rgba(212,160,23,0.20);
-        border-color: rgba(212,160,23,0.45);
+        box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
+        border-color: rgba(124,58,237,0.35);
     }
 
     /* Site container helper */
@@ -213,5 +216,32 @@
     [data-slot="card"] {
         border-radius: calc(var(--radius) + 2px);
         padding: 0.75rem;
+    }
+
+    /* Brand utilities */
+    .brand-badge {
+        background: conic-gradient(from 180deg at 50% 50%, #0ea5a4, #7c3aed 60%, #fb7185 100%);
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .brand-title {
+        background: var(--brand-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: 700;
+    }
+
+    .hero-card {
+        background: var(--hero-card-bg);
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        color: #082A28;
     }
 }
