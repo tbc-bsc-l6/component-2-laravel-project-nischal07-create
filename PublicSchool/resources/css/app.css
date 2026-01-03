@@ -1,9 +1,9 @@
+/* Import a classical serif font for a timeless look */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
+
 @import 'tailwindcss';
 
 @import "tw-animate-css";
-
-/* Import a classical serif font for a timeless look */
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -72,7 +72,7 @@
     --classical-secondary: #7c3aed; /* purple */
     --classical-muted: #475569; /* slate */
 
-    --background: #fff; /* fallback */
+    --background: linear-gradient(180deg, var(--hero-gradient-start), var(--hero-gradient-end)); /* fallback light background */
     --hero-gradient-start: #E6FFFA; /* light mint */
     --hero-gradient-end: #FFF7ED; /* light peach */
     --brand-gradient: linear-gradient(135deg, #0ea5a4 0%, #7c3aed 100%);
@@ -112,20 +112,20 @@
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
+    --background: #071122; /* deep navy */
+    --foreground: #E6F7F6; /* very light */
     --card: oklch(0.145 0 0);
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.145 0 0);
     --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.985 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
+    --primary: #06b6d4; /* teal bright */
+    --primary-foreground: #001219;
+    --secondary: #8b5cf6; /* purple */
+    --secondary-foreground: #0b1020;
+    --muted: #94a3b8;
+    --muted-foreground: #cbd5e1;
+    --accent: #fb7185;
+    --accent-foreground: #1a0b0f;
     --destructive: oklch(0.396 0.141 25.723);
     --destructive-foreground: oklch(0.637 0.237 25.331);
     --border: oklch(0.269 0 0);
@@ -144,7 +144,44 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(0.269 0 0);
     --sidebar-ring: oklch(0.439 0 0);
+    --hero-card-bg: linear-gradient(180deg, rgba(6,182,212,0.04), rgba(139,92,246,0.03));
 }
+
+/* Blink animation utilities */
+@keyframes blink-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0,0,0,0); transform: translateY(0); }
+    50% { box-shadow: 0 12px 30px -12px rgba(124,58,237,0.14); transform: translateY(-3px); }
+    100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); transform: translateY(0); }
+}
+
+.blinkable {
+    position: relative;
+    will-change: transform, box-shadow;
+}
+
+.blinkable.is-blinking,
+.blinkable:where(:hover,:focus-within) {
+    animation: blink-pulse 700ms ease-in-out 1;
+}
+
+.blinkable::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: -6px;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 240ms ease, transform 240ms ease;
+    transform: translateZ(0);
+}
+
+.blinkable.is-blinking::after {
+    opacity: 1;
+    background: linear-gradient(135deg, var(--classical-primary), var(--classical-secondary));
+    filter: blur(10px);
+}
+
+.blink-strong.is-blinking { transform: translateY(-2px); }
 
 @layer base {
     * {
@@ -154,10 +191,11 @@
     /* Apply a colorful brand as the default site font and background */
     body {
         font-family: var(--font-classical), var(--font-sans);
-        background: linear-gradient(180deg, var(--hero-gradient-start), var(--hero-gradient-end));
+        background: var(--background);
         color: var(--foreground);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        transition: background .25s ease, color .2s ease;
     }
 
     /* Headings: add modern colorful accents */
@@ -180,6 +218,84 @@
 
     button, .btn {
         font-family: var(--font-classical);
+
+        /* Improve button contrast in dark mode */
+        --btn-bg: color-mix(in srgb, var(--classical-primary) 60%, black 10%);
+        --btn-foreground: white;
+    }
+
+    /* Card tweaks for dark clarity */
+    [data-slot="card"] {
+        background: color-mix(in srgb, var(--card) 80%, transparent);
+        border-color: color-mix(in srgb, var(--classical-primary) 12%, transparent);
+        color: var(--card-foreground);
+    }
+
+    /* stronger card polish for dark clarity and spacing */
+    @media (min-width: 640px) {
+        [data-slot="card"] {
+            padding: 1.25rem 1.5rem;
+            border-radius: 0.75rem;
+        }
+    }
+
+    [data-slot="card"] {
+        box-shadow: 0 6px 20px rgba(2,6,23,0.48);
+        border-width: 1px;
+    }
+
+    [data-slot="card-header"] {
+        border-color: color-mix(in srgb, var(--classical-accent) 8%, transparent);
+    }
+
+    /* Tables: clearer header and subtle row hover for dark */
+    table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+    }
+
+    thead th {
+        background: color-mix(in srgb, var(--sidebar, #0b1220) 6%, transparent);
+        color: var(--muted-foreground);
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        backdrop-filter: blur(4px);
+    }
+
+    tbody tr:hover {
+        background: color-mix(in srgb, var(--muted, #94a3b8) 6%, transparent);
+    }
+
+    /* Improve badge contrast in dark */
+    .dark [data-slot="badge"] {
+        box-shadow: none;
+        opacity: 0.98;
+    }
+
+    /* Container tweaks for better responsiveness */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    @media (min-width: 1024px) {
+        .container {
+            max-width: 1080px;
+        }
+    }
+
+    /* Sidebar and header clarity */
+    .brand-badge {
+        background: linear-gradient(180deg, color-mix(in srgb, var(--classical-primary) 18%, black 80%), transparent);
+        padding: 6px;
+        border-radius: 8px;
+    }
+
+    header[role="banner"], .app-header, .app-shell header {
+        background: color-mix(in srgb, var(--sidebar, #071122) 80%, transparent);
+        border-bottom: 1px solid color-mix(in srgb, var(--sidebar-border) 40%, transparent);
     }
 
     /* Utility classes for classical styling */
@@ -242,6 +358,63 @@
         background: var(--hero-card-bg);
         border-radius: 0.75rem;
         padding: 1.25rem;
-        color: #082A28;
+        color: var(--foreground);
+        backdrop-filter: blur(6px) saturate(120%);
+        border: 1px solid rgba(255,255,255,0.06);
+        transition: background .25s ease, color .2s ease;
     }
+
+    /* Buttons and component styles using the new palette */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.9rem;
+        border-radius: 0.6rem;
+        font-weight: 600;
+        transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, var(--classical-primary), var(--classical-secondary));
+        color: white;
+        box-shadow: 0 6px 18px rgba(14,165,164,0.10);
+        border: none;
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(14,165,164,0.12); }
+
+    .btn-outline {
+        background: transparent;
+        color: var(--classical-primary);
+        border: 1px solid rgba(14,165,164,0.18);
+    }
+
+    /* Admin UI helpers */
+    .admin-layout {
+        display: flex; gap: 1rem; min-height: 100vh; background: var(--background); color: var(--foreground);
+    }
+
+    .admin-sidebar {
+        width: 260px; background: var(--sidebar); color: var(--sidebar-foreground); padding: 1rem; border-right: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .admin-header {
+        height: 64px; display:flex; align-items:center; gap:1rem; padding: 0 1rem; background: transparent; border-bottom:1px solid rgba(0,0,0,0.04);
+    }
+
+    .admin-content { flex:1; padding: 1.25rem; }
+
+    /* Theme toggle button */
+    .theme-toggle {
+        display:inline-flex; align-items:center; justify-content:center;
+        width:38px; height:38px; border-radius:8px; cursor:pointer;
+        background: transparent; border:1px solid rgba(255,255,255,0.06);
+        transition: transform .15s ease, background .15s ease;
+    }
+
+    .theme-toggle:hover { transform: translateY(-2px); }
+
+    .theme-toggle svg { width:18px; height:18px; }
 }
