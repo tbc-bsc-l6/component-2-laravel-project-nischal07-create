@@ -84,7 +84,7 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                 }
             >
                 {/* Top stats */}
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="card-grid">
                     <Card>
                         <CardHeader className="pb-2">
                             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -155,7 +155,7 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                                 <p className="px-6 pb-6 text-sm text-muted-foreground">No users found.</p>
                             ) : (
                                     <div className="border-t">
-                                        <div className="overflow-x-auto">
+                                        <div className="table-responsive">
                                             <Table>
                                         <TableHeader>
                                             <TableRow className="bg-muted/40">
@@ -203,7 +203,7 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                                 <p className="px-6 pb-6 text-sm text-muted-foreground">No courses found.</p>
                             ) : (
                                 <div className="border-t">
-                                    <div className="overflow-x-auto">
+                                        <div className="table-responsive">
                                         <Table>
                                         <TableHeader>
                                             <TableRow className="bg-muted/40">
