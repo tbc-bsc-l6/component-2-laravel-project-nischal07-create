@@ -16,7 +16,8 @@ class HandleAppearance
      */
     public function handle(Request $request, Closure $next): Response
     {
-        View::share('appearance', $request->cookie('appearance') ?? 'system');
+        // Default to 'dark' for a consistent site-wide dark theme when no cookie is present
+        View::share('appearance', $request->cookie('appearance') ?? 'dark');
 
         return $next($request);
     }
