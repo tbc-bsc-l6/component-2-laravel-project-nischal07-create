@@ -1,4 +1,5 @@
 import { type ReactNode, useState } from 'react';
+import { useAppearance } from '@/hooks/use-appearance';
 
 interface Props {
     title: string;
@@ -6,6 +7,34 @@ interface Props {
     actions?: ReactNode;
     sidebar?: ReactNode;
     children: ReactNode;
+}
+
+function ThemeToggle() {
+    const { appearance, updateAppearance } = useAppearance();
+
+    const current = appearance ?? 'system';
+
+    const isDark = current === 'dark' || (current === 'system' && typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    return (
+        <button
+            type="button"
+            aria-label="Toggle theme"
+            className="theme-toggle"
+            onClick={() => updateAppearance(isDark ? 'light' : 'dark')}
+            title={isDark ? 'Switch to light' : 'Switch to dark'}
+        >
+            {isDark ? (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+                </svg>
+            ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.36 6.36l-1.42-1.42M6.06 6.06L4.64 4.64m12.72 0l-1.42 1.42M6.06 17.94l-1.42 1.42" />
+                </svg>
+            )}
+        </button>
+    );
 }
 
 export default function DashboardLayout({ title, subtitle, actions, sidebar, children }: Props) {
@@ -38,7 +67,12 @@ export default function DashboardLayout({ title, subtitle, actions, sidebar, chi
                                 {subtitle ? <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p> : null}
                             </div>
 
-                            {actions ? <div className="mt-3 sm:mt-0">{actions}</div> : null}
+                            <div className="mt-3 sm:mt-0 flex items-center gap-3">
+                                {actions ? <div>{actions}</div> : null}
+
+                                {/* Theme toggle (client-side) */}
+                                <ThemeToggle />
+                            </div>
                         </div>
                     </div>
                 </header>
