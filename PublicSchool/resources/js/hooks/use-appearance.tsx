@@ -42,8 +42,9 @@ const handleSystemThemeChange = () => {
 
 export function initializeTheme() {
     const savedAppearance =
-        (localStorage.getItem('appearance') as Appearance) || 'system';
+        (localStorage.getItem('appearance') as Appearance) || 'dark';
 
+    // Default to dark theme like the welcome page unless user previously selected a preference
     applyTheme(savedAppearance);
 
     // Add the event listener for system theme changes...
