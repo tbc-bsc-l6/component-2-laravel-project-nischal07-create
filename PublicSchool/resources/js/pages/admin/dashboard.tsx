@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Users, BookOpen, UserCog, UserSquare2 } from 'lucide-react';
+import DashboardLayout from '@/components/dashboard/DashboardLayout';
 
 interface Stats {
     total_users: number;
@@ -55,18 +56,18 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
         <AppLayout>
             <Head title="Admin Dashboard" />
 
-            <div className="container mx-auto space-y-8 py-8">
-                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                    <div>
+            <DashboardLayout
+                title={
+                    <>
                         <div className="flex items-center gap-2">
                             <Users className="h-7 w-7 text-primary" />
-                            <h1 className="text-3xl font-semibold tracking-tight">Admin Dashboard</h1>
+                            <span>Admin Dashboard</span>
                         </div>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                            Overview of users and courses in the system.
-                        </p>
-                    </div>
-                    <div className="flex flex-wrap gap-3">
+                    </>
+                }
+                subtitle="Overview of users and courses in the system."
+                actions={
+                    <>
                         <Link href="/admin/users">
                             <Button size="sm" variant="outline" className="gap-2">
                                 <UserCog className="h-4 w-4" />
@@ -79,9 +80,9 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                                 Manage Courses
                             </Button>
                         </Link>
-                    </div>
-                </div>
-
+                    </>
+                }
+            >
                 {/* Top stats */}
                 <div className="grid gap-4 md:grid-cols-3">
                     <Card>
@@ -153,8 +154,9 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                             {recentUsers.length === 0 ? (
                                 <p className="px-6 pb-6 text-sm text-muted-foreground">No users found.</p>
                             ) : (
-                                <div className="border-t">
-                                    <Table>
+                                    <div className="border-t">
+                                        <div className="overflow-x-auto">
+                                            <Table>
                                         <TableHeader>
                                             <TableRow className="bg-muted/40">
                                                 <TableHead className="w-[180px]">Name</TableHead>
@@ -183,8 +185,9 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                                                 </TableRow>
                                             ))}
                                         </TableBody>
-                                    </Table>
-                                </div>
+                                            </Table>
+                                        </div>
+                                    </div>
                             )}
                         </CardContent>
                     </Card>
@@ -200,7 +203,8 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                                 <p className="px-6 pb-6 text-sm text-muted-foreground">No courses found.</p>
                             ) : (
                                 <div className="border-t">
-                                    <Table>
+                                    <div className="overflow-x-auto">
+                                        <Table>
                                         <TableHeader>
                                             <TableRow className="bg-muted/40">
                                                 <TableHead className="w-[180px]">Course</TableHead>
@@ -221,13 +225,14 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                                                 </TableRow>
                                             ))}
                                         </TableBody>
-                                    </Table>
-                                </div>
+                                            </Table>
+                                        </div>
+                                    </div>
                             )}
                         </CardContent>
                     </Card>
                 </div>
-            </div>
+                </DashboardLayout>
         </AppLayout>
     );
 }

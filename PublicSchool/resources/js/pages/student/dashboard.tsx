@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/lib/toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import DashboardLayout from '@/components/dashboard/DashboardLayout';
 
 interface Course {
     id: number;
@@ -61,9 +62,7 @@ export default function StudentDashboard({
             <AppLayout>
                 <Head title="Student Dashboard" />
 
-                <div className="container mx-auto py-8">
-                    <h1 className="text-3xl font-bold mb-6">Completed Courses</h1>
-
+                <DashboardLayout title={<span>Completed Courses</span>}>
                     {completedCourses.length === 0 ? (
                         <Card>
                             <CardContent className="py-8 text-center text-muted-foreground">
@@ -103,7 +102,7 @@ export default function StudentDashboard({
                             ))}
                         </div>
                     )}
-                </div>
+                </DashboardLayout>
             </AppLayout>
         );
     }
@@ -112,9 +111,7 @@ export default function StudentDashboard({
         <AppLayout>
             <Head title="Student Dashboard" />
 
-            <div className="container mx-auto py-8">
-                <h1 className="text-3xl font-bold mb-6">My Courses</h1>
-
+                <DashboardLayout title={<span>My Courses</span>}>
                 <Tabs defaultValue="enrolled" className="space-y-6">
                     <TabsList>
                         <TabsTrigger value="enrolled">
@@ -129,7 +126,7 @@ export default function StudentDashboard({
                     </TabsList>
 
                     <TabsContent value="enrolled">
-                        {enrolledCourses.length === 0 ? (
+                            {enrolledCourses.length === 0 ? (
                             <Card>
                                 <CardContent className="py-8 text-center text-muted-foreground">
                                     You are not enrolled in any courses. Check the Available tab to enroll.
@@ -269,7 +266,7 @@ export default function StudentDashboard({
                         )}
                     </TabsContent>
                 </Tabs>
-            </div>
+                    </DashboardLayout>
         </AppLayout>
     );
 }

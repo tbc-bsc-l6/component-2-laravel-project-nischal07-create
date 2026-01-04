@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import DashboardLayout from '@/components/dashboard/DashboardLayout';
 
 interface Course {
     id: number;
@@ -22,9 +23,7 @@ export default function TeacherDashboard({ courses }: Props) {
         <AppLayout>
             <Head title="Teacher Dashboard" />
 
-            <div className="container mx-auto py-8">
-                <h1 className="text-3xl font-bold mb-6">My Courses</h1>
-
+            <DashboardLayout title={<span>My Courses</span>}>
                 {courses.length === 0 ? (
                     <Card>
                         <CardContent className="py-8 text-center text-muted-foreground">
@@ -72,7 +71,7 @@ export default function TeacherDashboard({ courses }: Props) {
                         ))}
                     </div>
                 )}
-            </div>
+            </DashboardLayout>
         </AppLayout>
     );
 }
