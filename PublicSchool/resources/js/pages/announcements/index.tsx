@@ -41,16 +41,36 @@ export default function AnnouncementsIndex({ announcements, filters }: PageProps
         ))}
       </ul>
 
-      <nav className="flex flex-wrap gap-2 mt-6">
-        {announcements?.links?.map((link, i) => (
-          <Link
-            key={i}
-            href={link.url || ''}
-            preserveState
-            className={`px-3 py-1 rounded border ${link.active ? 'bg-slate-900 text-white' : 'bg-white dark:bg-slate-800'}`}
-            dangerouslySetInnerHTML={{ __html: link.label }}
-          />
-        ))}
+      <nav className="flex flex-wrap gap-2 mt-6" aria-label="Pagination">
+        {announcements?.links?.map((link, i) => {
+          const isDisabled = !link.url;
+          const classes = `px-3 py-1 rounded border transition ${
+            link.active
+              ? 'bg-slate-900 text-white border-slate-900'
+              : 'bg-white dark:bg-slate-800 hover:border-slate-400'
+          } ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+
+          if (isDisabled) {
+            return (
+              <span
+                key={i}
+                className={classes}
+                dangerouslySetInnerHTML={{ __html: link.label }}
+              />
+            );
+          }
+
+          return (
+            <Link
+              key={i}
+              href={link.url}
+              preserveState
+              preserveScroll
+              className={classes}
+              dangerouslySetInnerHTML={{ __html: link.label }}
+            />
+          );
+        })}
       </nav>
     </div>
   );
