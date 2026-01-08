@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 
 class AnnouncementController extends Controller
@@ -84,5 +85,24 @@ class AnnouncementController extends Controller
         return response()->json([
             'data' => $items,
         ]);
+    }
+
+    public function feed()
+    {
+        $items = Announcement::query()
+            ->published()
+            ->orderByDesc('is_pinned')
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
+            ->limit(20)
+            ->get();
+
+        $xml = view('feed.announcements', [
+            'items' => $items,
+            'now' => now(),
+            'link' => URL::to('/announcements'),
+        ])->render();
+
+        return response($xml, 200)->header('Content-Type', 'application/rss+xml; charset=UTF-8');
     }
 }
