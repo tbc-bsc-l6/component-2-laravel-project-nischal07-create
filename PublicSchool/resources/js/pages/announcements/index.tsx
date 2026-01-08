@@ -1,4 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
+import { AnnouncementCard } from '@/components/announcement-card';
 import type { PageProps } from '@/types';
 
 interface AnnouncementListItem {
@@ -36,22 +37,7 @@ export default function AnnouncementsIndex({ announcements, filters }: PageProps
 
       <ul className="space-y-4">
         {announcements?.data?.map((a) => (
-          <li key={a.id} className="border rounded p-4 bg-white/80 dark:bg-slate-800/60">
-            <div className="flex items-center gap-2 mb-2">
-              {a.is_pinned && (
-                <span className="text-xs px-2 py-0.5 rounded bg-amber-100 text-amber-800">Pinned</span>
-              )}
-              <span className="text-xs text-slate-500">
-                {a.published_at ? new Date(a.published_at).toLocaleString() : ''}
-              </span>
-            </div>
-            <h2 className="text-lg font-medium">
-              <Link href={`/announcements/${a.id}`} className="hover:underline">
-                {a.title}
-              </Link>
-            </h2>
-            <p className="text-slate-600 dark:text-slate-300 mt-2">{a.excerpt}</p>
-          </li>
+          <AnnouncementCard key={a.id} {...a} />
         ))}
       </ul>
 
