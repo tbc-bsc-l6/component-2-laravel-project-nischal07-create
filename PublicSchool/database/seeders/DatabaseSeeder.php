@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\Course;
+use App\Models\Announcement;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -226,6 +227,27 @@ class DatabaseSeeder extends Seeder
                     'completed_at' => now()->subMonths(2),
                     'pass_status' => 'fail',
                 ]
+            ]);
+        }
+
+        // Create sample announcements
+        if (Announcement::count() === 0) {
+            Announcement::factory()->count(8)->create([
+                'user_id' => $admin->id,
+            ]);
+
+            // Ensure at least one pinned and one scheduled
+            Announcement::factory()->create([
+                'title' => 'Welcome to Public School Portal',
+                'is_pinned' => true,
+                'published_at' => now()->subDay(),
+                'user_id' => $admin->id,
+            ]);
+
+            Announcement::factory()->create([
+                'title' => 'Maintenance Window (Scheduled)',
+                'published_at' => now()->addDays(2),
+                'user_id' => $admin->id,
             ]);
         }
     }
