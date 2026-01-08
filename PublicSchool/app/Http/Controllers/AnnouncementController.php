@@ -28,7 +28,7 @@ class AnnouncementController extends Controller
                     return [
                         'id' => $a->id,
                         'title' => $a->title,
-                        'excerpt' => str($a->body)->limit(180)->toString(),
+                        'excerpt' => $a->excerpt,
                         'published_at' => optional($a->published_at)->toIso8601String(),
                         'is_pinned' => (bool) $a->is_pinned,
                     ];
@@ -76,7 +76,7 @@ class AnnouncementController extends Controller
                 return [
                     'id' => $a->id,
                     'title' => $a->title,
-                    'excerpt' => str($a->body)->limit(180)->toString(),
+                    'excerpt' => $a->excerpt,
                     'published_at' => optional($a->published_at)->toIso8601String(),
                     'is_pinned' => (bool) $a->is_pinned,
                 ];

@@ -24,6 +24,10 @@ class Announcement extends Model
         'is_pinned' => 'boolean',
     ];
 
+    protected $appends = [
+        'excerpt',
+    ];
+
     public function scopePublished(Builder $query): Builder
     {
         return $query->whereNotNull('published_at')
@@ -44,5 +48,10 @@ class Announcement extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getExcerptAttribute(): string
+    {
+        return str($this->body)->limit(180)->toString();
     }
 }
