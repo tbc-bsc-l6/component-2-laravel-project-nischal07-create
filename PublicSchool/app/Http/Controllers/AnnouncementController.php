@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Announcement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
 class AnnouncementController extends Controller
@@ -11,23 +12,28 @@ class AnnouncementController extends Controller
     public function index(Request $request)
     {
         $q = (string) $request->query('q', '');
-        $announcements = Announcement::query()
-            ->published()
-            ->search($q)
-            ->orderByDesc('is_pinned')
-            ->orderByDesc('published_at')
-            ->orderByDesc('id')
-            ->paginate(10)
-            ->through(function ($a) {
-                return [
-                    'id' => $a->id,
-                    'title' => $a->title,
-                    'excerpt' => str($a->body)->limit(180)->toString(),
-                    'published_at' => optional($a->published_at)->toIso8601String(),
-                    'is_pinned' => (bool) $a->is_pinned,
-                ];
-            })
-            ->withQueryString();
+        $page = $request->integer('page', 1);
+        $cacheKey = sprintf('announcements:index:q:%s:page:%d', md5($q), $page);
+
+        $announcements = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($q) {
+            return Announcement::query()
+                ->published()
+                ->search($q)
+                ->orderByDesc('is_pinned')
+                ->orderByDesc('published_at')
+                ->orderByDesc('id')
+                ->paginate(10)
+                ->through(function ($a) {
+                    return [
+                        'id' => $a->id,
+                        'title' => $a->title,
+                        'excerpt' => str($a->body)->limit(180)->toString(),
+                        'published_at' => optional($a->published_at)->toIso8601String(),
+                        'is_pinned' => (bool) $a->is_pinned,
+                    ];
+                })
+                ->withQueryString();
+        });
 
         return Inertia::render('announcements/index', [
             'filters' => ['q' => $q],
