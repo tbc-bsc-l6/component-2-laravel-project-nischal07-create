@@ -1,4 +1,5 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage, router } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 import { AnnouncementCard } from '@/components/announcement-card';
 import type { PageProps } from '@/types';
 
@@ -20,26 +21,45 @@ interface IndexProps {
 
 export default function AnnouncementsIndex({ announcements, filters }: PageProps<IndexProps>) {
   const { props } = usePage<PageProps<IndexProps>>();
+  const [q, setQ] = useState(filters?.q ?? '');
+
+  useEffect(() => {
+    const handle = setTimeout(() => {
+      router.get(
+        '/announcements',
+        { q },
+        { preserveState: true, preserveScroll: true, replace: true },
+      );
+    }, 250);
+
+    return () => clearTimeout(handle);
+  }, [q]);
 
   return (
     <div className="max-w-3xl mx-auto p-6">
       <Head title="Announcements" />
       <h1 className="text-2xl font-semibold mb-4">Announcements</h1>
 
-      <form method="get" action="/announcements" className="mb-6">
+      <div className="mb-6">
         <input
           name="q"
-          defaultValue={filters?.q ?? ''}
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
           placeholder="Search announcements..."
           className="w-full border rounded px-3 py-2"
+          aria-label="Search announcements"
         />
-      </form>
+      </div>
 
-      <ul className="space-y-4">
-        {announcements?.data?.map((a) => (
-          <AnnouncementCard key={a.id} {...a} />
-        ))}
-      </ul>
+      {announcements?.data?.length ? (
+        <ul className="space-y-4">
+          {announcements.data.map((a) => (
+            <AnnouncementCard key={a.id} {...a} />
+          ))}
+        </ul>
+      ) : (
+        <p className="text-sm text-slate-500">No announcements found.</p>
+      )}
 
       <nav className="flex flex-wrap gap-2 mt-6" aria-label="Pagination">
         {announcements?.links?.map((link, i) => {
