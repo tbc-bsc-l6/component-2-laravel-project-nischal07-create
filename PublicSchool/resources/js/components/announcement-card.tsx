@@ -13,8 +13,10 @@ export function AnnouncementCard({
   published_at?: string | null;
   is_pinned: boolean;
 }) {
+  const pinnedClasses = is_pinned ? 'border-amber-300 shadow-sm' : 'border-slate-200 dark:border-slate-700';
+
   return (
-    <li className="border rounded p-4 bg-white/80 dark:bg-slate-800/60">
+    <li className={`border rounded p-4 bg-white/80 dark:bg-slate-800/60 ${pinnedClasses}`}>
       <div className="flex items-center gap-2 mb-2">
         {is_pinned && (
           <span className="text-xs px-2 py-0.5 rounded bg-amber-100 text-amber-800">Pinned</span>
