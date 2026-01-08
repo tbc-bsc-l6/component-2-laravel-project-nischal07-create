@@ -41,6 +41,11 @@ export function AppSidebar() {
             href: dashboardHref,
             icon: LayoutGrid,
         },
+        {
+            title: 'Announcements',
+            href: '/announcements',
+            icon: Folder,
+        },
     ];
 
     if (roleName === 'admin') {
