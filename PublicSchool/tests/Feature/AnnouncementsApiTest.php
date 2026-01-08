@@ -23,13 +23,17 @@ class AnnouncementsApiTest extends TestCase
 
     public function test_api_applies_search_and_limit(): void
     {
-        $match = Announcement::factory()->create(['title' => 'Cafeteria Menu', 'published_at' => now()]);
+        $matchSet = Announcement::factory()->count(6)->create([
+            'title' => 'Cafeteria Menu',
+            'published_at' => now(),
+        ]);
         Announcement::factory()->count(30)->create(['published_at' => now()]);
 
         $response = $this->getJson('/api/announcements?q=cafeteria&limit=5')
             ->assertOk()
             ->assertJsonCount(5, 'data');
 
-        $this->assertTrue(collect($response->json('data'))->pluck('id')->contains($match->id));
+        $matchIds = $matchSet->pluck('id');
+        $this->assertTrue(collect($response->json('data'))->pluck('id')->intersect($matchIds)->isNotEmpty());
     }
 }
