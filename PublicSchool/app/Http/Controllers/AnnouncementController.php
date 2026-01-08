@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use App\Http\Resources\AnnouncementResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\URL;
@@ -24,15 +25,7 @@ class AnnouncementController extends Controller
                 ->orderByDesc('published_at')
                 ->orderByDesc('id')
                 ->paginate(10)
-                ->through(function ($a) {
-                    return [
-                        'id' => $a->id,
-                        'title' => $a->title,
-                        'excerpt' => $a->excerpt,
-                        'published_at' => optional($a->published_at)->toIso8601String(),
-                        'is_pinned' => (bool) $a->is_pinned,
-                    ];
-                })
+                ->through(fn ($a) => (new AnnouncementResource($a))->resolve())
                 ->withQueryString();
         });
 
@@ -49,13 +42,7 @@ class AnnouncementController extends Controller
         }
 
         return Inertia::render('announcements/show', [
-            'announcement' => [
-                'id' => $announcement->id,
-                'title' => $announcement->title,
-                'body' => $announcement->body,
-                'published_at' => optional($announcement->published_at)->toIso8601String(),
-                'is_pinned' => (bool) $announcement->is_pinned,
-            ],
+            'announcement' => (new AnnouncementResource($announcement))->resolve(),
         ]);
     }
 
@@ -64,23 +51,16 @@ class AnnouncementController extends Controller
         $q = (string) $request->query('q', '');
         $limit = min($request->integer('limit', 20), 50);
 
-        $items = Announcement::query()
-            ->published()
-            ->search($q)
-            ->orderByDesc('is_pinned')
-            ->orderByDesc('published_at')
-            ->orderByDesc('id')
-            ->limit($limit)
-            ->get()
-            ->map(function ($a) {
-                return [
-                    'id' => $a->id,
-                    'title' => $a->title,
-                    'excerpt' => $a->excerpt,
-                    'published_at' => optional($a->published_at)->toIso8601String(),
-                    'is_pinned' => (bool) $a->is_pinned,
-                ];
-            });
+        $items = AnnouncementResource::collection(
+            Announcement::query()
+                ->published()
+                ->search($q)
+                ->orderByDesc('is_pinned')
+                ->orderByDesc('published_at')
+                ->orderByDesc('id')
+                ->limit($limit)
+                ->get()
+        );
 
         return response()->json([
             'data' => $items,
