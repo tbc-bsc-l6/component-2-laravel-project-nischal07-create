@@ -57,4 +57,32 @@ class AnnouncementController extends Controller
             ],
         ]);
     }
+
+    public function apiIndex(Request $request)
+    {
+        $q = (string) $request->query('q', '');
+        $limit = min($request->integer('limit', 20), 50);
+
+        $items = Announcement::query()
+            ->published()
+            ->search($q)
+            ->orderByDesc('is_pinned')
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->get()
+            ->map(function ($a) {
+                return [
+                    'id' => $a->id,
+                    'title' => $a->title,
+                    'excerpt' => str($a->body)->limit(180)->toString(),
+                    'published_at' => optional($a->published_at)->toIso8601String(),
+                    'is_pinned' => (bool) $a->is_pinned,
+                ];
+            });
+
+        return response()->json([
+            'data' => $items,
+        ]);
+    }
 }

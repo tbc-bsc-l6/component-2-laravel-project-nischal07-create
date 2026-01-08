@@ -90,3 +90,7 @@ require __DIR__.'/settings.php';
 // Public Announcements (read-only)
 Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
 Route::get('/announcements/{announcement}', [AnnouncementController::class, 'show'])->name('announcements.show');
+
+Route::prefix('api')->middleware('throttle:60,1')->group(function () {
+    Route::get('/announcements', [AnnouncementController::class, 'apiIndex']);
+});
