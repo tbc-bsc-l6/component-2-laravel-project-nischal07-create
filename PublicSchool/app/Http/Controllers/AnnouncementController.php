@@ -10,8 +10,29 @@ class AnnouncementController extends Controller
 {
     public function index(Request $request)
     {
-        // Implemented in next commit
-        return Inertia::render('announcements/index');
+        $q = (string) $request->query('q', '');
+        $announcements = Announcement::query()
+            ->published()
+            ->search($q)
+            ->orderByDesc('is_pinned')
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->through(function ($a) {
+                return [
+                    'id' => $a->id,
+                    'title' => $a->title,
+                    'excerpt' => str($a->body)->limit(180)->toString(),
+                    'published_at' => optional($a->published_at)->toIso8601String(),
+                    'is_pinned' => (bool) $a->is_pinned,
+                ];
+            })
+            ->withQueryString();
+
+        return Inertia::render('announcements/index', [
+            'filters' => ['q' => $q],
+            'announcements' => $announcements,
+        ]);
     }
 
     public function show(Announcement $announcement)
