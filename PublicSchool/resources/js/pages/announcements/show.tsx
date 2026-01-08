@@ -6,6 +6,7 @@ interface ShowProps {
     id: number;
     title: string;
     body: string;
+    excerpt?: string;
     published_at?: string | null;
     is_pinned: boolean;
   };
@@ -14,7 +15,11 @@ interface ShowProps {
 export default function AnnouncementShow({ announcement }: PageProps<ShowProps>) {
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <Head title={announcement.title} />
+      <Head title={announcement.title}>
+        {announcement.excerpt && (
+          <meta name="description" content={announcement.excerpt} />
+        )}
+      </Head>
       <Link href="/announcements" className="text-sm text-blue-600 hover:underline">← Back</Link>
       <div className="mt-4 border rounded p-6 bg-white/80 dark:bg-slate-800/60">
         <div className="flex items-center gap-2 mb-3">
