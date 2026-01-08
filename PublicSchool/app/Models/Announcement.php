@@ -28,6 +28,12 @@ class Announcement extends Model
         'excerpt',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(fn () => cache()->flush());
+        static::deleted(fn () => cache()->flush());
+    }
+
     public function scopePublished(Builder $query): Builder
     {
         return $query->whereNotNull('published_at')
