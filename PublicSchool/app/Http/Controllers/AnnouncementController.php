@@ -37,7 +37,10 @@ class AnnouncementController extends Controller
 
     public function show(Announcement $announcement)
     {
-        // Implemented in next commit
+        if (!$announcement->published_at || $announcement->published_at->isFuture()) {
+            abort(404);
+        }
+
         return Inertia::render('announcements/show', [
             'announcement' => [
                 'id' => $announcement->id,
