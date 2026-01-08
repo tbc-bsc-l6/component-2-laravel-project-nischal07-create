@@ -40,6 +40,13 @@ export default function AnnouncementsIndex({ announcements, filters }: PageProps
       <Head title="Announcements" />
       <h1 className="text-2xl font-semibold mb-4">Announcements</h1>
 
+      <div className="flex items-center justify-between mb-4 text-sm text-slate-600 dark:text-slate-300">
+        <span>Stay up to date with the latest news.</span>
+        <Link href="/feed/announcements" className="text-blue-600 hover:underline">
+          RSS Feed
+        </Link>
+      </div>
+
       <div className="mb-6">
         <input
           name="q"
