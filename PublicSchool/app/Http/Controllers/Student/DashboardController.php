@@ -50,7 +50,9 @@ class DashboardController extends Controller
             ->get()
             ->filter(function ($course) {
                 return $course->hasSpace();
-            });
+            })
+            ->values()
+            ->all();
 
         $canEnrollMore = $student->canEnrollInMoreCourses();
 
