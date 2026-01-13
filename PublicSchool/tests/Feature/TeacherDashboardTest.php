@@ -2,11 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Models\Announcement;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\Course;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Inertia\Testing\AssertableInertia as Assert;
 
 class TeacherDashboardTest extends TestCase
 {
@@ -56,5 +58,22 @@ class TeacherDashboardTest extends TestCase
         $response = $this->actingAs($user)->get('/teacher/dashboard');
 
         $response->assertForbidden();
+    }
+
+    public function test_teacher_dashboard_includes_announcements_widget(): void
+    {
+        $announcement = Announcement::factory()->create([
+            'title' => 'Staff Reminder',
+            'is_pinned' => true,
+            'published_at' => now()->subHours(2),
+        ]);
+
+        $response = $this->actingAs($this->teacher)->get('/teacher/dashboard');
+
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('teacher/dashboard')
+            ->has('announcements', 1)
+            ->where('announcements.0.title', $announcement->title)
+        );
     }
 }

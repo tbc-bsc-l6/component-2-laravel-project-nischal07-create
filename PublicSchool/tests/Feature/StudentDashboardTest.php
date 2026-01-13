@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\Announcement;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Inertia\Testing\AssertableInertia as Assert;
 
 class StudentDashboardTest extends TestCase
 {
@@ -94,5 +96,29 @@ class StudentDashboardTest extends TestCase
         $response = $this->actingAs($teacher)->get('/student/dashboard');
 
         $response->assertForbidden();
+    }
+
+    public function test_student_dashboard_includes_announcements_widget(): void
+    {
+        $announcement = Announcement::factory()->create([
+            'title' => 'Pinned Notice',
+            'is_pinned' => true,
+            'published_at' => now()->subDay(),
+        ]);
+
+        Announcement::factory()->create([
+            'title' => 'Future Notice',
+            'is_pinned' => false,
+            'published_at' => now()->addDay(),
+        ]);
+
+        $response = $this->actingAs($this->student)->get('/student/dashboard');
+
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('student/dashboard')
+            ->has('announcements', 1)
+            ->where('announcements.0.title', $announcement->title)
+            ->where('announcements.0.is_pinned', true)
+        );
     }
 }
