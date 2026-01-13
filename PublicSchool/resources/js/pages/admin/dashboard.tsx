@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Users, BookOpen, UserCog, UserSquare2 } from 'lucide-react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
+import { AnnouncementSpotlight, type AnnouncementHighlight } from '@/components/dashboard/AnnouncementSpotlight';
 
 interface Stats {
     total_users: number;
@@ -49,9 +50,10 @@ interface Props {
     stats: Stats;
     recentUsers: User[];
     recentCourses: Course[];
+    announcements: AnnouncementHighlight[];
 }
 
-export default function AdminDashboard({ stats, recentUsers, recentCourses }: Props) {
+export default function AdminDashboard({ stats, recentUsers, recentCourses, announcements }: Props) {
     return (
         <AppLayout>
             <Head title="Admin Dashboard" />
@@ -143,7 +145,7 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                     </Card>
                 </div>
 
-                <div className="grid gap-6 lg:grid-cols-2">
+                <div className="grid gap-6 lg:grid-cols-3">
                     {/* Recent Users */}
                     <Card>
                         <CardHeader>
@@ -154,40 +156,40 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                             {recentUsers.length === 0 ? (
                                 <p className="px-6 pb-6 text-sm text-muted-foreground">No users found.</p>
                             ) : (
-                                    <div className="border-t">
-                                        <div className="table-responsive">
-                                            <Table>
-                                        <TableHeader>
-                                            <TableRow className="bg-muted/40">
-                                                <TableHead className="w-[180px]">Name</TableHead>
-                                                <TableHead>Email</TableHead>
-                                                <TableHead className="w-[120px]">Role</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {recentUsers.map((user) => (
-                                                <TableRow key={user.id}>
-                                                    <TableCell className="font-medium">{user.name}</TableCell>
-                                                    <TableCell className="text-muted-foreground">{user.email}</TableCell>
-                                                    <TableCell>
-                                                        <Badge
-                                                            variant={
-                                                                user.role.name === 'admin'
-                                                                    ? 'outline'
-                                                                    : user.role.name === 'teacher'
-                                                                        ? 'success'
-                                                                        : 'secondary'
-                                                            }
-                                                        >
-                                                            {user.role.display_name}
-                                                        </Badge>
-                                                    </TableCell>
+                                <div className="border-t">
+                                    <div className="table-responsive">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow className="bg-muted/40">
+                                                    <TableHead className="w-[180px]">Name</TableHead>
+                                                    <TableHead>Email</TableHead>
+                                                    <TableHead className="w-[120px]">Role</TableHead>
                                                 </TableRow>
-                                            ))}
-                                        </TableBody>
-                                            </Table>
-                                        </div>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {recentUsers.map((user) => (
+                                                    <TableRow key={user.id}>
+                                                        <TableCell className="font-medium">{user.name}</TableCell>
+                                                        <TableCell className="text-muted-foreground">{user.email}</TableCell>
+                                                        <TableCell>
+                                                            <Badge
+                                                                variant={
+                                                                    user.role.name === 'admin'
+                                                                        ? 'outline'
+                                                                        : user.role.name === 'teacher'
+                                                                            ? 'success'
+                                                                            : 'secondary'
+                                                                }
+                                                            >
+                                                                {user.role.display_name}
+                                                            </Badge>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
                                     </div>
+                                </div>
                             )}
                         </CardContent>
                     </Card>
@@ -203,34 +205,36 @@ export default function AdminDashboard({ stats, recentUsers, recentCourses }: Pr
                                 <p className="px-6 pb-6 text-sm text-muted-foreground">No courses found.</p>
                             ) : (
                                 <div className="border-t">
-                                        <div className="table-responsive">
+                                    <div className="table-responsive">
                                         <Table>
-                                        <TableHeader>
-                                            <TableRow className="bg-muted/40">
-                                                <TableHead className="w-[180px]">Course</TableHead>
-                                                <TableHead>Teacher</TableHead>
-                                                <TableHead className="w-[120px] text-right">Students</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {recentCourses.map((course) => (
-                                                <TableRow key={course.id}>
-                                                    <TableCell className="font-medium">{course.name}</TableCell>
-                                                    <TableCell className="text-muted-foreground">
-                                                        {course.teacher?.name || 'Not assigned'}
-                                                    </TableCell>
-                                                    <TableCell className="text-right text-muted-foreground">
-                                                        {course.students_count} / {course.max_students}
-                                                    </TableCell>
+                                            <TableHeader>
+                                                <TableRow className="bg-muted/40">
+                                                    <TableHead className="w-[180px]">Course</TableHead>
+                                                    <TableHead>Teacher</TableHead>
+                                                    <TableHead className="w-[120px] text-right">Students</TableHead>
                                                 </TableRow>
-                                            ))}
-                                        </TableBody>
-                                            </Table>
-                                        </div>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {recentCourses.map((course) => (
+                                                    <TableRow key={course.id}>
+                                                        <TableCell className="font-medium">{course.name}</TableCell>
+                                                        <TableCell className="text-muted-foreground">
+                                                            {course.teacher?.name || 'Not assigned'}
+                                                        </TableCell>
+                                                        <TableCell className="text-right text-muted-foreground">
+                                                            {course.students_count} / {course.max_students}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
                                     </div>
+                                </div>
                             )}
                         </CardContent>
                     </Card>
+
+                    <AnnouncementSpotlight announcements={announcements} />
                 </div>
                 </DashboardLayout>
         </AppLayout>
