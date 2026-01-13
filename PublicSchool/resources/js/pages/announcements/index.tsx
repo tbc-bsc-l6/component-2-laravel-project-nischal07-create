@@ -1,7 +1,6 @@
 import { Head, Link, usePage, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { AnnouncementCard } from '@/components/announcement-card';
-import type { PageProps } from '@/types';
 
 interface AnnouncementListItem {
   id: number;
@@ -19,8 +18,7 @@ interface IndexProps {
   filters: { q?: string };
 }
 
-export default function AnnouncementsIndex({ announcements, filters }: PageProps<IndexProps>) {
-  const { props } = usePage<PageProps<IndexProps>>();
+export default function AnnouncementsIndex({ announcements, filters }: IndexProps) {
   const [q, setQ] = useState(filters?.q ?? '');
 
   useEffect(() => {
@@ -60,7 +58,7 @@ export default function AnnouncementsIndex({ announcements, filters }: PageProps
 
       {announcements?.data?.length ? (
         <ul className="space-y-4">
-          {announcements.data.map((a) => (
+          {announcements.data.map((a: AnnouncementListItem) => (
             <AnnouncementCard key={a.id} {...a} />
           ))}
         </ul>
@@ -69,7 +67,7 @@ export default function AnnouncementsIndex({ announcements, filters }: PageProps
       )}
 
       <nav className="flex flex-wrap gap-2 mt-6" aria-label="Pagination">
-        {announcements?.links?.map((link, i) => {
+        {announcements?.links?.map((link: { url: string | null; label: string; active: boolean }, i) => {
           const isDisabled = !link.url;
           const classes = `px-3 py-1 rounded border transition ${
             link.active
@@ -90,7 +88,7 @@ export default function AnnouncementsIndex({ announcements, filters }: PageProps
           return (
             <Link
               key={i}
-              href={link.url}
+              href={link.url!}
               preserveState
               preserveScroll
               className={classes}
