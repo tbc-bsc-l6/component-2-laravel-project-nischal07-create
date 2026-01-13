@@ -68,7 +68,16 @@ class CourseController extends Controller
         ]);
 
         return Inertia::render('admin/courses/edit', [
-            'course' => $course,
+            'course' => [
+                'id' => $course->id,
+                'name' => $course->name,
+                'description' => $course->description,
+                'is_available' => $course->is_available,
+                'max_students' => $course->max_students,
+                'teacher_id' => $course->teacher_id,
+                'teacher' => $course->teacher,
+                'students' => $course->students,
+            ],
             'teachers' => $teachers,
         ]);
     }
