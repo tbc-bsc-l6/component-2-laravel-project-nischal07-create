@@ -77,6 +77,11 @@ export default function Welcome({
                                 Join as a student, teacher, or admin. Choose your role below and get started with a tidy, classical learning experience.
                             </p>
 
+                            <div className="mb-4 rounded-md border border-[color:var(--classical-border)] bg-white/60 p-3 text-sm text-[var(--classical-primary)] dark:bg-white/10">
+                                <strong className="block mb-1">What's new</strong>
+                                <a href="/announcements" className="underline">Read announcements</a> or subscribe via RSS to stay in sync with updates.
+                            </div>
+
                             {/* Role selector + CTA */}
                             <div className="mb-4 flex flex-col gap-3">
                                 <div className="max-w-xs">

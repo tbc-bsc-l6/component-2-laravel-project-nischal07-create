@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Support\AnnouncementHighlights;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -25,6 +26,7 @@ class DashboardController extends Controller
                 'availableCourses' => [],
                 'canEnrollMore' => false,
                 'isOldStudent' => true,
+                'announcements' => AnnouncementHighlights::forDashboard(),
             ]);
         }
 
@@ -58,6 +60,7 @@ class DashboardController extends Controller
             'availableCourses' => $availableCourses,
             'canEnrollMore' => $canEnrollMore,
             'isOldStudent' => false,
+            'announcements' => AnnouncementHighlights::forDashboard(),
         ]);
     }
 }

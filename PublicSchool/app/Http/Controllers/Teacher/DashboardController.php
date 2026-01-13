@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Support\AnnouncementHighlights;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,6 +20,7 @@ class DashboardController extends Controller
 
         return Inertia::render('teacher/dashboard', [
             'courses' => $courses,
+            'announcements' => AnnouncementHighlights::forDashboard(),
         ]);
     }
 

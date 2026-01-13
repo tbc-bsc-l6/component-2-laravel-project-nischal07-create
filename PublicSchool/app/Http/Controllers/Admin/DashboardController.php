@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\User;
+use App\Support\AnnouncementHighlights;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -38,6 +39,7 @@ class DashboardController extends Controller
             'stats' => $stats,
             'recentUsers' => $recentUsers,
             'recentCourses' => $recentCourses,
+            'announcements' => AnnouncementHighlights::forDashboard(),
         ]);
     }
 }

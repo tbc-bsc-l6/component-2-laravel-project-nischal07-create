@@ -10,6 +10,7 @@ use App\Http\Controllers\Teacher\GradingController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
+use App\Http\Controllers\AnnouncementController;
 
 Route::get('/', function () {
     return Inertia::render('welcome', [
@@ -85,3 +86,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/settings.php';
+
+// Public Announcements (read-only)
+Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+Route::get('/announcements/{announcement}', [AnnouncementController::class, 'show'])->name('announcements.show');
+Route::get('/feed/announcements', [AnnouncementController::class, 'feed'])->name('announcements.feed');
+
+Route::prefix('api')->middleware('throttle:60,1')->group(function () {
+    Route::get('/announcements', [AnnouncementController::class, 'apiIndex']);
+});
