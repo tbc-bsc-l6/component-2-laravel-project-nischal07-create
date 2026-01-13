@@ -26,7 +26,7 @@ class DashboardController extends Controller
                 'availableCourses' => [],
                 'canEnrollMore' => false,
                 'isOldStudent' => true,
-                'announcements' => AnnouncementHighlights::forDashboard(),
+                'announcements' => AnnouncementHighlights::forDashboard()->values()->all(),
             ]);
         }
 
@@ -60,7 +60,7 @@ class DashboardController extends Controller
             'availableCourses' => $availableCourses,
             'canEnrollMore' => $canEnrollMore,
             'isOldStudent' => false,
-            'announcements' => AnnouncementHighlights::forDashboard(),
+            'announcements' => AnnouncementHighlights::forDashboard()->values()->all(),
         ]);
     }
 }

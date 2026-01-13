@@ -55,13 +55,12 @@ export default function EditCourse({ course, teachers }: Props) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        const submissionData = {
+        transform((data) => ({
             ...data,
             teacher_id: data.teacher_id ? parseInt(data.teacher_id, 10) : null,
-        };
+        }));
 
         put(`/admin/courses/${course.id}`, {
-            data: submissionData,
             preserveScroll: true,
             onSuccess: () => toast.success('Course updated successfully'),
             onError: () => toast.error('Failed to update course'),

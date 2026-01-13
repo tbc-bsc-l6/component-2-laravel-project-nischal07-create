@@ -22,6 +22,9 @@ export default function AnnouncementsIndex({ announcements, filters }: IndexProp
   const [q, setQ] = useState(filters?.q ?? '');
 
   useEffect(() => {
+    // Avoid refetch loop when the query hasn't changed (initial render)
+    if (q === (filters?.q ?? '')) return;
+
     const handle = setTimeout(() => {
       router.get(
         '/announcements',
@@ -31,7 +34,7 @@ export default function AnnouncementsIndex({ announcements, filters }: IndexProp
     }, 250);
 
     return () => clearTimeout(handle);
-  }, [q]);
+  }, [q, filters?.q]);
 
   return (
     <div className="max-w-3xl mx-auto p-6">

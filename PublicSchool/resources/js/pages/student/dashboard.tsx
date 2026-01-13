@@ -65,7 +65,7 @@ export default function StudentDashboard({
             <AppLayout>
                 <Head title="Student Dashboard" />
 
-                <DashboardLayout title={<span>Completed Courses</span>}>
+                <DashboardLayout title="Completed Courses">
                     <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
                         <div>
                             {completedCourses.length === 0 ? (
@@ -98,8 +98,8 @@ export default function StudentDashboard({
                                                                 : 'N/A'}
                                                         </p>
                                                     </div>
-                                                    <Badge variant={course.pivot!.pass_status === 'pass' ? 'success' : 'destructive'}>
-                                                        {course.pivot!.pass_status.toUpperCase()}
+                                                    <Badge variant={course.pivot?.pass_status === 'pass' ? 'success' : 'destructive'}>
+                                                        {course.pivot?.pass_status?.toUpperCase() || 'N/A'}
                                                     </Badge>
                                                 </div>
                                             </CardContent>
@@ -162,7 +162,9 @@ export default function StudentDashboard({
                                                         <div className="text-sm">
                                                             <p className="text-muted-foreground">Enrolled:</p>
                                                             <p className="font-medium">
-                                                                {new Date(course.pivot!.enrolled_at).toLocaleDateString()}
+                                                                {course.pivot?.enrolled_at
+                                                                    ? new Date(course.pivot.enrolled_at).toLocaleDateString()
+                                                                    : 'N/A'}
                                                             </p>
                                                         </div>
                                                         <Badge variant="secondary">In Progress</Badge>
@@ -212,8 +214,8 @@ export default function StudentDashboard({
                                                             : 'N/A'}
                                                                 </p>
                                                         </div>
-                                                        <Badge variant={course.pivot!.pass_status === 'pass' ? 'success' : 'destructive'}>
-                                                            {course.pivot!.pass_status.toUpperCase()}
+                                                        <Badge variant={course.pivot?.pass_status === 'pass' ? 'success' : 'destructive'}>
+                                                            {course.pivot?.pass_status?.toUpperCase() || 'N/A'}
                                                         </Badge>
                                                     </div>
                                                 </CardContent>

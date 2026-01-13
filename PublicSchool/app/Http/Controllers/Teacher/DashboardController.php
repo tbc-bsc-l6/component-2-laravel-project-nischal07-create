@@ -20,7 +20,7 @@ class DashboardController extends Controller
 
         return Inertia::render('teacher/dashboard', [
             'courses' => $courses,
-            'announcements' => AnnouncementHighlights::forDashboard(),
+            'announcements' => AnnouncementHighlights::forDashboard()->values()->all(),
         ]);
     }
 
