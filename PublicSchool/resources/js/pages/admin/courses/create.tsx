@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default function CreateCourse({ teachers }: Props) {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, transform } = useForm({
         name: '',
         description: '',
         is_available: true,
@@ -28,6 +28,12 @@ export default function CreateCourse({ teachers }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        
+        transform((current) => ({
+            ...current,
+            teacher_id: current.teacher_id ? parseInt(current.teacher_id, 10) : null,
+        }));
+        
         post('/admin/courses');
     };
 

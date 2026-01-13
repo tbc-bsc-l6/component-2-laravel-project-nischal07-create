@@ -130,12 +130,16 @@ class CourseController extends Controller
     public function assignTeacher(Request $request, Course $course)
     {
         $validated = $request->validate([
-            'teacher_id' => 'required|exists:users,id',
+            'teacher_id' => 'nullable|exists:users,id',
         ]);
 
         $course->update(['teacher_id' => $validated['teacher_id']]);
 
-        return back()->with('success', 'Teacher assigned successfully.');
+        $message = $validated['teacher_id'] 
+            ? 'Teacher assigned successfully.' 
+            : 'Teacher removed successfully.';
+
+        return back()->with('success', $message);
     }
 
     public function removeStudent(Course $course, User $student)
