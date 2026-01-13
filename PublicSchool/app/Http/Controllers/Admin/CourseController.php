@@ -131,13 +131,19 @@ class CourseController extends Controller
 
     public function removeStudent(Course $course, User $student)
     {
-        // Keep module history intact: only allow removing currently-enrolled (pending) students.
-        $isCurrentlyEnrolled = $course->students()
+        // Verify the student is actually enrolled in this course
+        $enrollment = $course->students()
             ->where('user_id', $student->id)
-            ->wherePivot('pass_status', 'pending')
-            ->exists();
+            ->first();
 
-        if (!$isCurrentlyEnrolled) {
+        if (!$enrollment) {
+            return back()->withErrors([
+                'error' => 'Student is not enrolled in this course.',
+            ]);
+        }
+
+        // Only allow removing currently-enrolled (pending) students to preserve completion history
+        if ($enrollment->pivot->pass_status !== 'pending') {
             return back()->withErrors([
                 'error' => 'Only currently enrolled students can be removed (completed history is preserved).',
             ]);

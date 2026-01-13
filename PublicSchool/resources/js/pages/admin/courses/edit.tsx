@@ -71,7 +71,10 @@ export default function EditCourse({ course, teachers }: Props) {
         if (confirm('Remove this student from the course? (Completed history is preserved)')) {
             router.delete(`/admin/courses/${course.id}/students/${studentId}`, {
                 preserveScroll: true,
-                onSuccess: () => toast.success('Student removed from course'),
+                onSuccess: () => {
+                    toast.success('Student removed from course');
+                    router.reload();
+                },
                 onError: (errs) => {
                     const errorMsg = Object.values(errs).flat()[0] as string;
                     toast.error(errorMsg || 'Failed to remove student');
