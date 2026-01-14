@@ -68,7 +68,16 @@ class CourseController extends Controller
         ]);
 
         return Inertia::render('admin/courses/edit', [
-            'course' => $course,
+            'course' => [
+                'id' => $course->id,
+                'name' => $course->name,
+                'description' => $course->description,
+                'is_available' => $course->is_available,
+                'max_students' => $course->max_students,
+                'teacher_id' => $course->teacher_id,
+                'teacher' => $course->teacher,
+                'students' => $course->students,
+            ],
             'teachers' => $teachers,
         ]);
     }
@@ -121,23 +130,33 @@ class CourseController extends Controller
     public function assignTeacher(Request $request, Course $course)
     {
         $validated = $request->validate([
-            'teacher_id' => 'required|exists:users,id',
+            'teacher_id' => 'nullable|exists:users,id',
         ]);
 
         $course->update(['teacher_id' => $validated['teacher_id']]);
 
-        return back()->with('success', 'Teacher assigned successfully.');
+        $message = $validated['teacher_id'] 
+            ? 'Teacher assigned successfully.' 
+            : 'Teacher removed successfully.';
+
+        return back()->with('success', $message);
     }
 
     public function removeStudent(Course $course, User $student)
     {
-        // Keep module history intact: only allow removing currently-enrolled (pending) students.
-        $isCurrentlyEnrolled = $course->students()
+        // Verify the student is actually enrolled in this course
+        $enrollment = $course->students()
             ->where('user_id', $student->id)
-            ->wherePivot('pass_status', 'pending')
-            ->exists();
+            ->first();
 
-        if (!$isCurrentlyEnrolled) {
+        if (!$enrollment) {
+            return back()->withErrors([
+                'error' => 'Student is not enrolled in this course.',
+            ]);
+        }
+
+        // Only allow removing currently-enrolled (pending) students to preserve completion history
+        if ($enrollment->pivot->pass_status !== 'pending') {
             return back()->withErrors([
                 'error' => 'Only currently enrolled students can be removed (completed history is preserved).',
             ]);

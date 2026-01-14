@@ -43,10 +43,10 @@ export default function CoursesIndex({ courses, teachers }: Props) {
         }
     };
 
-    const assignTeacher = (courseId: number, teacherId: number) => {
+    const assignTeacher = (courseId: number, teacherId: number | null) => {
         router.post(`/admin/courses/${courseId}/assign-teacher`, { teacher_id: teacherId }, {
-            onSuccess: () => toast.success('Teacher assigned successfully'),
-            onError: () => toast.error('Failed to assign teacher'),
+            onSuccess: () => toast.success(teacherId ? 'Teacher assigned successfully' : 'Teacher removed successfully'),
+            onError: () => toast.error('Failed to update teacher'),
         });
     };
 

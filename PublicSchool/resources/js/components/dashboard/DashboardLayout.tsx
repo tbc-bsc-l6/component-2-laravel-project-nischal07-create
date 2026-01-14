@@ -2,8 +2,8 @@ import { type ReactNode, useState } from 'react';
 import { useAppearance } from '@/hooks/use-appearance';
 
 interface Props {
-    title: string;
-    subtitle?: string;
+    title: ReactNode;
+    subtitle?: ReactNode;
     actions?: ReactNode;
     sidebar?: ReactNode;
     children: ReactNode;

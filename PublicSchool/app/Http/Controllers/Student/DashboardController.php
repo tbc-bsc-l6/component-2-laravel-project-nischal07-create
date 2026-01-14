@@ -26,7 +26,7 @@ class DashboardController extends Controller
                 'availableCourses' => [],
                 'canEnrollMore' => false,
                 'isOldStudent' => true,
-                'announcements' => AnnouncementHighlights::forDashboard(),
+                'announcements' => AnnouncementHighlights::forDashboard()->values()->all(),
             ]);
         }
 
@@ -50,7 +50,9 @@ class DashboardController extends Controller
             ->get()
             ->filter(function ($course) {
                 return $course->hasSpace();
-            });
+            })
+            ->values()
+            ->all();
 
         $canEnrollMore = $student->canEnrollInMoreCourses();
 
@@ -60,7 +62,7 @@ class DashboardController extends Controller
             'availableCourses' => $availableCourses,
             'canEnrollMore' => $canEnrollMore,
             'isOldStudent' => false,
-            'announcements' => AnnouncementHighlights::forDashboard(),
+            'announcements' => AnnouncementHighlights::forDashboard()->values()->all(),
         ]);
     }
 }

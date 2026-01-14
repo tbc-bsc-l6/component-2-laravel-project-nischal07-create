@@ -55,9 +55,9 @@ export default function EditCourse({ course, teachers }: Props) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        transform((current) => ({
-            ...current,
-            teacher_id: current.teacher_id ? parseInt(current.teacher_id, 10) : null,
+        transform((data) => ({
+            ...data,
+            teacher_id: data.teacher_id ? parseInt(data.teacher_id, 10) : null,
         }));
 
         put(`/admin/courses/${course.id}`, {
@@ -71,7 +71,10 @@ export default function EditCourse({ course, teachers }: Props) {
         if (confirm('Remove this student from the course? (Completed history is preserved)')) {
             router.delete(`/admin/courses/${course.id}/students/${studentId}`, {
                 preserveScroll: true,
-                onSuccess: () => toast.success('Student removed from course'),
+                onSuccess: () => {
+                    toast.success('Student removed from course');
+                    router.reload();
+                },
                 onError: (errs) => {
                     const errorMsg = Object.values(errs).flat()[0] as string;
                     toast.error(errorMsg || 'Failed to remove student');

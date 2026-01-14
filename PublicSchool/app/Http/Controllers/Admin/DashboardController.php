@@ -39,7 +39,7 @@ class DashboardController extends Controller
             'stats' => $stats,
             'recentUsers' => $recentUsers,
             'recentCourses' => $recentCourses,
-            'announcements' => AnnouncementHighlights::forDashboard(),
+            'announcements' => AnnouncementHighlights::forDashboard()->values()->all(),
         ]);
     }
 }
