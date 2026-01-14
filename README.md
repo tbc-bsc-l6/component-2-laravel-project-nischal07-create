@@ -96,3 +96,10 @@ Marks in highest category (80%+) will need to have
 
 An example video showing a site with the above features implemented will be availble through the VLE.
 
+## Announcements (new)
+
+- Public read-only list at `/announcements` with search, pagination, pinned sorting, and detail pages.
+- JSON endpoint at `/api/announcements` (supports `q` and `limit` params, throttled).
+- RSS feed at `/feed/announcements` for syndication.
+- Seeder adds sample announcements; run `php artisan migrate --seed` in `PublicSchool/`.
+

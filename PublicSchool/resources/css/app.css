@@ -1,0 +1,454 @@
+/* Import a classical serif font for a timeless look */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
+
+@import 'tailwindcss';
+
+@import "tw-animate-css";
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+    --font-sans:
+        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+
+    --radius-lg: var(--radius);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-sm: calc(var(--radius) - 4px);
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+    /* Brand / colorful theme variables */
+    --font-classical: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --classical-primary: #0ea5a4; /* teal */
+    --classical-accent: #fb7185; /* pink/coral */
+    --classical-secondary: #7c3aed; /* purple */
+    --classical-muted: #475569; /* slate */
+
+    --background: linear-gradient(180deg, var(--hero-gradient-start), var(--hero-gradient-end)); /* fallback light background */
+    --hero-gradient-start: #E6FFFA; /* light mint */
+    --hero-gradient-end: #FFF7ED; /* light peach */
+    --brand-gradient: linear-gradient(135deg, #0ea5a4 0%, #7c3aed 100%);
+    --hero-card-bg: linear-gradient(180deg, rgba(14,165,164,0.08), rgba(124,58,237,0.06));
+    --foreground: #1b1b18; /* deep text */
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.87 0 0);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.87 0 0);
+}
+
+.dark {
+    --background: #071122; /* deep navy */
+    --foreground: #E6F7F6; /* very light */
+    --card: oklch(0.145 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.145 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: #06b6d4; /* teal bright */
+    --primary-foreground: #001219;
+    --secondary: #8b5cf6; /* purple */
+    --secondary-foreground: #0b1020;
+    --muted: #94a3b8;
+    --muted-foreground: #cbd5e1;
+    --accent: #fb7185;
+    --accent-foreground: #1a0b0f;
+    --destructive: oklch(0.396 0.141 25.723);
+    --destructive-foreground: oklch(0.637 0.237 25.331);
+    --border: oklch(0.269 0 0);
+    --input: oklch(0.269 0 0);
+    --ring: oklch(0.439 0 0);
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.985 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(0.269 0 0);
+    --sidebar-ring: oklch(0.439 0 0);
+    --hero-card-bg: linear-gradient(180deg, rgba(6,182,212,0.04), rgba(139,92,246,0.03));
+}
+
+/* Blink animation utilities */
+@keyframes blink-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0,0,0,0); transform: translateY(0); }
+    50% { box-shadow: 0 12px 30px -12px rgba(124,58,237,0.14); transform: translateY(-3px); }
+    100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); transform: translateY(0); }
+}
+
+.blinkable {
+    position: relative;
+    will-change: transform, box-shadow;
+}
+
+.blinkable.is-blinking,
+.blinkable:where(:hover,:focus-within) {
+    animation: blink-pulse 700ms ease-in-out 1;
+}
+
+.blinkable::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: -6px;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 240ms ease, transform 240ms ease;
+    transform: translateZ(0);
+}
+
+.blinkable.is-blinking::after {
+    opacity: 1;
+    background: linear-gradient(135deg, var(--classical-primary), var(--classical-secondary));
+    filter: blur(10px);
+}
+
+.blink-strong.is-blinking { transform: translateY(-2px); }
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    /* Apply a colorful brand as the default site font and background */
+    body {
+        font-family: var(--font-classical), var(--font-sans);
+        background: var(--background);
+        color: var(--foreground);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transition: background .25s ease, color .2s ease;
+    }
+
+    /* Headings: add modern colorful accents */
+    h1, h2, h3 {
+        font-family: var(--font-classical);
+        color: var(--classical-secondary);
+        letter-spacing: -0.01em;
+        line-height: 1.08;
+    }
+
+    h1 { font-size: 1.9rem; }
+    h2 { font-size: 1.35rem; }
+    h3 { font-size: 1.1rem; }
+
+    /* Links and primary buttons use brand colors */
+    a, .btn-primary, .btn-accent {
+        color: var(--classical-primary);
+        text-decoration: none;
+    }
+
+    button, .btn {
+        font-family: var(--font-classical);
+
+        /* Improve button contrast in dark mode */
+        --btn-bg: color-mix(in srgb, var(--classical-primary) 60%, black 10%);
+        --btn-foreground: white;
+    }
+
+    /* Card tweaks for dark clarity */
+    [data-slot="card"] {
+        background: color-mix(in srgb, var(--card) 80%, transparent);
+        border-color: color-mix(in srgb, var(--classical-primary) 12%, transparent);
+        color: var(--card-foreground);
+    }
+
+    /* stronger card polish for dark clarity and spacing */
+    @media (min-width: 640px) {
+        [data-slot="card"] {
+            padding: 1.25rem 1.5rem;
+            border-radius: 0.75rem;
+        }
+    }
+
+    [data-slot="card"] {
+        box-shadow: 0 6px 20px rgba(2,6,23,0.48);
+        border-width: 1px;
+    }
+
+    [data-slot="card-header"] {
+        border-color: color-mix(in srgb, var(--classical-accent) 8%, transparent);
+    }
+
+    /* Tables: clearer header and subtle row hover for dark */
+    table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+    }
+
+    thead th {
+        background: color-mix(in srgb, var(--sidebar, #0b1220) 6%, transparent);
+        color: var(--muted-foreground);
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        backdrop-filter: blur(4px);
+    }
+
+    tbody tr:hover {
+        background: color-mix(in srgb, var(--muted, #94a3b8) 6%, transparent);
+    }
+
+    /* Improve badge contrast in dark */
+    .dark [data-slot="badge"] {
+        box-shadow: none;
+        opacity: 0.98;
+    }
+
+    /* Container tweaks for better responsiveness */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    @media (min-width: 1024px) {
+        .container {
+            max-width: 1080px;
+        }
+    }
+
+    /* Sidebar and header clarity */
+    .brand-badge {
+        background: linear-gradient(180deg, color-mix(in srgb, var(--classical-primary) 18%, black 80%), transparent);
+        padding: 6px;
+        border-radius: 8px;
+    }
+
+    header[role="banner"], .app-header, .app-shell header {
+        background: color-mix(in srgb, var(--sidebar, #071122) 80%, transparent);
+        border-bottom: 1px solid color-mix(in srgb, var(--sidebar-border) 40%, transparent);
+    }
+
+    /* Utility classes for classical styling */
+    .classical-title { font-family: var(--font-classical); color: var(--classical-primary); }
+    .classical-accent { color: var(--classical-accent); }
+
+    /* Accessible focus rings using the classical accent */
+    :where(input, textarea, select, button, a):focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
+        border-color: rgba(124,58,237,0.35);
+    }
+
+    /* Site container helper */
+    .site-container {
+        max-width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* Subtle muted backgrounds for panels */
+    .muted-bg {
+        background: rgba(213,170,31,0.04);
+    }
+
+    /* Table and list row hover: gentle warm accent */
+    .table-row:hover, .list-row:hover {
+        background: rgba(212,160,23,0.06);
+    }
+
+    /* Make cards feel lighter and tidier */
+    [data-slot="card"] {
+        border-radius: calc(var(--radius) + 2px);
+        padding: 0.75rem;
+    }
+
+    /* Brand utilities */
+    .brand-badge {
+        background: conic-gradient(from 180deg at 50% 50%, #0ea5a4, #7c3aed 60%, #fb7185 100%);
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .brand-title {
+        background: var(--brand-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: 700;
+    }
+
+    .hero-card {
+        background: var(--hero-card-bg);
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        color: var(--foreground);
+        backdrop-filter: blur(6px) saturate(120%);
+        border: 1px solid rgba(255,255,255,0.06);
+        transition: background .25s ease, color .2s ease, transform .15s ease;
+        box-shadow: 0 8px 30px rgba(2,6,23,0.5);
+    }
+
+    /* Buttons and component styles using the new palette */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.55rem 1rem;
+        border-radius: 0.6rem;
+        font-weight: 700;
+        transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, color-mix(in srgb, var(--classical-primary) 60%, var(--classical-secondary) 40%), var(--classical-secondary));
+        color: white;
+        box-shadow: 0 10px 30px rgba(14,165,164,0.12);
+        border: 1px solid rgba(255,255,255,0.04);
+        padding: 0.6rem 1.05rem;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px) scale(1.01);
+        box-shadow: 0 16px 40px rgba(14,165,164,0.14);
+    }
+
+    .btn-outline {
+        background: transparent;
+        color: var(--classical-primary);
+        border: 1px solid rgba(14,165,164,0.18);
+    }
+
+    /* Card grid for dashboards */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        align-items: start;
+    }
+
+    /* Mobile stacking: cards become full width */
+    @media (max-width: 640px) {
+        .card-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+    }
+
+    /* Table responsive wrapper */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0.5rem;
+    }
+    .table-responsive table { min-width: 640px; }
+
+    /* Admin UI helpers */
+    .admin-layout {
+        display: flex; gap: 1rem; min-height: 100vh; background: var(--background); color: var(--foreground);
+    }
+
+    .admin-sidebar {
+        width: 260px; background: var(--sidebar); color: var(--sidebar-foreground); padding: 1rem; border-right: 1px solid rgba(0,0,0,0.06);
+        transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .admin-header {
+        height: 64px; display:flex; align-items:center; gap:1rem; padding: 0 1rem; background: transparent; border-bottom:1px solid rgba(0,0,0,0.04);
+    }
+
+    .admin-content { flex:1; padding: 1.25rem; }
+
+    /* Make sidebar collapse to top bar on small screens */
+    @media (max-width: 768px) {
+        .admin-layout { flex-direction: column; }
+        .admin-sidebar { width: 100%; order: 0; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .admin-content { order: 1; padding: 0.75rem; }
+    }
+
+    /* Theme toggle button */
+    .theme-toggle {
+        display:inline-flex; align-items:center; justify-content:center;
+        width:38px; height:38px; border-radius:8px; cursor:pointer;
+        background: transparent; border:1px solid rgba(255,255,255,0.06);
+        transition: transform .15s ease, background .15s ease;
+    }
+
+    .theme-toggle:hover { transform: translateY(-2px); }
+
+    .theme-toggle svg { width:18px; height:18px; }
+}

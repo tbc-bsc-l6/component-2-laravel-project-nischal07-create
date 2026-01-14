@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI_Usage</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+        body {
+            font-family: "Jura", sans-serif;
+            width: 95vw;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .answer_required {
+            font-family: "Montserrat", sans-serif;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        /* ai page */
+        #ai .card {
+            background-color:#e7e5e4;
+            border-radius: 4px;
+            border: 1px solid #dbdbdb;
+            color: #363636;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        #ai .card-header {
+            background-color: #57534d;
+            border-bottom: 1px solid #dbdbdb;
+            border-radius: 4px 4px 0 0;
+            color: #f1f5f9;
+            font-weight: 700; 
+            font-size: 1rem;            
+            padding: 0.75em 1em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #ai .card-body {
+            padding: 1em 1em;         
+            color: #4a4a4a;
+        }
+        #ai > h1 {
+            font-family: "Montserrat", sans-serif;
+            font-weight: 700;
+            border-bottom: #222525 2px solid;     
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 1.5em;
+        }
+    </style>
+</head>
+<body>
+<section id="ai">
+		<h1>Summary and Reflection on Artificial Intelligence (AI) Usage</h1>
+
+        <div class="card" style="background-color: #fbfbfb; border-radius: 6px; border: 1px solid #dbdbdb; margin-bottom: 1.5rem; padding: 1em;">
+            <div class="card-body">
+                <p>
+                    <span class="answer_required">Please provide a list of the AI prompts used to assist
+                        in the creation of your assignment, along with a brief reflection on how the AI response
+                        helped (or not) your understanding. If you did not use AI, please state "No AI used".
+                    </span>
+                </p>
+                <p>
+                    <span class="answer_required">Please note that the list does not need to
+                        include every minor prompt, but should cover the main prompts that 
+                        significantly influenced and assisted you in your assignment.
+                    </span>
+                </p>
+                <p>
+                    <span class="answer_required">Please create a new card for each prompt
+                        used, detailing the prompt, a summary of the AI's response, and your 
+                        reflection on its usefulness. Please also include the date when the prompt
+                        was made.
+                    </span>
+                </p>
+                <p>
+                    <span class="answer_required">Please commit regularly to GIT - 
+                        so that the date can be verified. While the exact date of the commit
+                        may not match the date of the prompt, it should be close enough to
+                        provide a reasonable estimate of when the prompt was made. 
+                        </span>
+                </p>
+                <p>
+                    <span class="answer_required">Completing this 
+                        page at the end will not be acceptable.
+                    </span>
+                </p>
+            </div>
+        </div>
+        
+
+        <!-- Prompt 1 -->
+		<div class="card">
+            <div class="card-header">
+                <p>Prompt:             
+                    <span class="answer_required" style="color: #f1f5f9;">
+                        add some new feature for 30 commits but not change previous feature
+                    </span>
+                </p>
+                <p>Date: 13-01-2026</p>
+            </div>
+            <div class="card-body">
+                <p>
+                    AI helped me implement a complete announcements system with CRUD operations, caching, JSON API, RSS feed, and dashboard widgets. The AI guided me through creating migrations, models, controllers, routes, and React components. It also helped set up proper authorization, validation, and testing. This significantly accelerated development and ensured I followed Laravel and React best practices.
+                </p>
+            </div>
+	    </div>
+
+        <!-- Prompt 2 -->
+		<div class="card">
+            <div class="card-header">
+                <p>Prompt:             
+                    <span class="answer_required" style="color: #f1f5f9;">
+                        make admin can remove student from module
+                    </span>
+                </p>
+                <p>Date: 13-01-2026</p>
+            </div>
+            <div class="card-body">
+                <p>
+                    AI helped verify and fix the student removal functionality. It checked the controller logic, routes, and frontend implementation. The AI also created comprehensive PHPUnit tests to ensure the feature works correctly, including edge cases like preventing removal of students who have already completed courses. This taught me about proper testing practices.
+                </p>
+            </div>
+	    </div>
+
+        <!-- Prompt 3 -->
+		<div class="card">
+            <div class="card-header">
+                <p>Prompt:             
+                    <span class="answer_required" style="color: #f1f5f9;">
+                        failed to no assign teacher
+                    </span>
+                </p>
+                <p>Date: 13-01-2026</p>
+            </div>
+            <div class="card-body">
+                <p>
+                    AI identified that the teacher assignment validation required a teacher_id when it should allow null for unassigning teachers. It fixed the validation rules and updated the frontend to properly handle empty teacher selections by transforming empty strings to null. This helped me understand Laravel validation rules and Inertia form data transformation.
+                </p>
+            </div>
+	    </div>
+
+        <!-- Prompt 4 -->
+		<div class="card">
+            <div class="card-header">
+                <p>Prompt:             
+                    <span class="answer_required" style="color: #f1f5f9;">
+                        why showing blank page after clicking from welcome page
+                    </span>
+                </p>
+                <p>Date: 13-01-2026</p>
+            </div>
+            <div class="card-body">
+                <p>
+                    AI diagnosed an infinite loop in the announcements page useEffect hook that was causing continuous reloads. It added a guard condition to prevent unnecessary router.get calls when the query hadn't changed. This taught me about React hooks dependencies and how to prevent infinite render loops in Inertia applications.
+                </p>
+            </div>
+	    </div>
+
+        <!-- Prompt 5 -->
+		<div class="card">
+            <div class="card-header">
+                <p>Prompt:             
+                    <span class="answer_required" style="color: #f1f5f9;">
+                        in dashboard.tsx there is error fix it
+                    </span>
+                </p>
+                <p>Date: 13-01-2026</p>
+            </div>
+            <div class="card-body">
+                <p>
+                    AI identified that Laravel Collections weren't being serialized to arrays properly for Inertia, causing "i.map is not a function" errors in React. It fixed this by adding .values().all() to all Collection responses in dashboard controllers. This was crucial learning about Laravel-Inertia data serialization and why Collections need explicit array conversion before being sent to the frontend.
+                </p>
+            </div>
+	    </div>
+
+
+</section>
+</body>
+</html>
